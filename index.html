@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" type="text/css" href="/phi-html/default.css">
+    <title>phi-plugin</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+    <script src="https://unpkg.com/art-template/lib/template-web.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+
+<body>
+
+    <div class="background">
+        <img src="/phi-html/ill/illBlur/996.李化禹.png" alt="曲绘"
+            id="bkg">
+    </div>
+
+    <div class="loading" id="loading">
+        <p id="local"></p>
+        <p id="lastest"></p>
+        <div class="poz" id="poz">
+            <p>→</p>
+        </div>
+        <p>avatar</p>
+        <p>info</p>
+        <p>difficulty</p>
+        <p>nicklist</p>
+        <p>tips</p>
+        <p>infolist</p>
+        <p>notesInfo</p>
+        <p id="updateInfoState">正在检查更新...</p>
+    </div>
+
+    <div class="tokenBox" id="tokenBox">
+        <div class="input-container">
+            <input type="text" id="i-name" name="i-name" value="{{ sessionToken }}" aria-labelledby="label-name" />
+            <label class="label" for="i-name" id="label-name">
+                <div class="text">your sessionToken</div>
+            </label>
+        </div>
+        <div class="btn-box">
+            <button class="btn" id="submit" class="btn">submit</botton>
+        </div>
+        <div class="userInfo" id="userInfo"> </div>
+        <div class="btn-box" id="fnc-btn"></div>
+    </div>
+    <script src="/phi-html/model/fCompute.js"></script>
+    <script src="/phi-html/model/getInfo.js"></script>
+    <script src="/phi-html/model/phigrosUser.js"></script>
+    <script src="/phi-html/model/class/Save.js"></script>
+    <script src="/phi-html/app/b19.js"></script>
+    <script>
+        const inputEle = document.getElementById('i-name')
+        inputEle.addEventListener('input', () => {
+            inputEle.setAttribute('value', inputEle.value)
+        })
+    </script>
+    <script>
+            (function (win, doc) {
+                'use strict';
+                let options = { dpr: win.devicePixelRatio };
+                let html = doc.documentElement,
+                    dpr = html.getAttribute('data-dpr') || options.dpr,
+                    viewPort = doc.querySelector('meta[name="viewport"]'),
+                    rotate = win.onorientationchange ? 'orientationchange' : 'resize';
+
+                // 设置html fontSize
+                function setSize() {
+                    let winWidth = win.innerWidth || html.clientWidth;
+                    html.style.fontSize = 100 * winWidth / (window.innerWidth > window.innerHeight ? 4096 : 2048) + 'px';
+                };
+
+                // 设置 initial-scale
+                function setScale() {
+                    setSize();
+                    let viewContent = viewPort.getAttribute('content');
+                    let reg = /initial-scale=(\d(.\d+)?)/i;
+                    let matchRes = viewContent.match(reg);
+                    let scale = 1 / parseInt(dpr);
+                    if (matchRes && matchRes[1] == scale) {
+                        return;
+                    }
+                    let newContent = viewContent.replace(reg, function (a, b) {
+                        return a.replace(/\d(.\d+)?/i, scale);
+                    });
+                    viewPort.setAttribute('content', newContent);
+                };
+
+                win.addEventListener(rotate, setSize);
+                window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+                requestAnimationFrame(setScale);
+            }(window, document));
+    </script>
+</body>
+
+</html>

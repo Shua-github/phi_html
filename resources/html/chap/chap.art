@@ -1,0 +1,81 @@
+{{extend defaultLayout}}
+{{block 'css'}}
+    <link rel="stylesheet" href="{{_res_path}}html/chap/chap.css">
+{{/block}}
+{{block 'main'}}
+    <div class="illustration">
+        <img src="{{chapIll}}" alt="{{chapIll}}">
+    </div>
+    <div class="bar">
+        <div class="player">
+            <p>Player: {{player.id}}</p>
+            <p>chap: {{chapName}}</p>
+        </div>
+        <div class="count">
+            {{each count value index}}
+            {{if index == 'tot'}}
+            <p>tot: {{value}}</p>
+            {{else}}
+            <img src="{{_imgPath}}/{{index}}.png" alt="{{index}}">
+            <p>{{value}}</p>
+            {{/if}}
+            {{/each}}
+        </div>
+        <div class="song-box">
+            {{set song_style = (num <= 30) ? 1 : 2}}
+            {{set song_num = (num <= 30) ? 5 : 15}}
+            {{set tem = 0}}
+            {{each song_box song}}
+            <div class="song song_{{song_style}}" style="left: {{((num <= 30) ? 100 : 130) + (((num <= 30) ? -200 : -230) / (song_num - 1)) * (tem % song_num) + ((num <= 30) ? (num <= 10 ? 700 : 230) : 85) * ((tem - (tem % song_num)) / song_num)}}px;top: {{(((num <= 30) ? 600 : 690) / (song_num - 1)) * (tem % song_num)}}px;">
+                <div class="common_ill ill"> 
+                    <img src="{{song.illustration}}" alt="{{illustration}}">
+                </div>
+                <div class="info">
+                    {{if num <= 10}}
+                    {{each song.chart chart rank}}
+                    <div class="rank {{rank}}" style="height: {{song.chart.AT ? 23 : 30}}%;">
+                        <div class="rating">
+                            <img src="{{_imgPath}}/{{chart.Rating}}.png" alt="{{chart.Rating}}">
+                        </div>
+                        <div class="dif">{{chart.difficulty}}</div>
+                        {{if chart.acc && num <= 10}}
+                        <div class="score">{{chart.score}}</div>
+                        <div class="acc">{{chart.acc}}%</div>
+                        {{if num <= 5}}
+                        <div class="rks">= {{chart.rks}}</div>
+                        <div class="suggest">>> {{chart.suggest}}</div>
+                        {{/if}}
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                    {{else}}
+                    <div class="score-bar">
+                        {{each song.chart value}}
+                        <div class="{{value.Rating}}"></div>
+                        {{/each}}
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+            <% ++tem %>
+            {{/each}}
+        </div>
+
+        {{each progress value index}} 
+        <div class="progress {{index}}-bar">
+            <div class="progress-bar" style="width: {{value}}%;"></div>
+            <p>&ensp;{{value.toFixed(4)}}%</p>
+        </div>
+        {{/each}}
+
+        <div class="createdbox">
+            <div class="phi-plugin">
+                <p>{{_plugin}}</p>
+            </div>
+            <div class="ver">
+                <p>{{Version.ver}}</p>
+            </div>
+        </div>
+        
+    </div>
+{{/block}}
